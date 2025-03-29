@@ -1,21 +1,34 @@
 package br.com.locadora.filme;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class FilmeService {
-	@Autowired
-	private FilmeRepository repository;
+
+	private final FilmeRepository repository;
 	
-	public List<Filme> getAllFilme() {
-		return repository.findAll(Sort.by("titulo").ascending());
-	}
-	public Filme getFilmeById(Long id) {
-		return repository.getReferenceById(id);
+	public Filme salvar(Filme filme) {
+		return repository.save(filme);
 	}
 
+	public void excluir(Filme filme) {
+		repository.delete(filme);
+	}
+
+	public Optional<Filme> obterPorId(UUID id) {
+		return repository.findById(id);
+	}
+
+	public void atualizar(Filme filme) {
+		if(filme.getId() == null) {
+			throw new IllegalArgumentException("Filme não cadastrado");
+		}
+
+		repository.save(filme);
+	}
 }

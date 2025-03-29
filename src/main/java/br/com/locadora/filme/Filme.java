@@ -30,15 +30,5 @@ public class Filme{
 		this.titulo = dados.titulo();
 		this.nomeDiretor = dados.nomeDiretor();
 	}
-
-	public void atualizarInformacoes(DadosAtualizacaoFilme dados) {
-		if (dados.titulo() != null) {
-			this.titulo = dados.titulo();
-		}
-
-		if (dados.nomeDiretor() != null) {
-			this.nomeDiretor = dados.nomeDiretor();
-		}
-	}
 	
 }
