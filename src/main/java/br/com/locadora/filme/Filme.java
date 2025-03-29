@@ -1,13 +1,16 @@
 package br.com.locadora.filme;
 
 import java.io.Serializable;
+import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import br.com.locadora.ator.Ator;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
+@Data
+@RequiredArgsConstructor
 public class Filme implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -20,31 +23,12 @@ public class Filme implements Serializable{
 	
 	private String nomeDiretor;
 
+	@ManyToMany(mappedBy = "ator")
+	private List<Ator> atores;
+
 	public Filme(DadosCadastroFilme dados) {
 		this.titulo = dados.titulo();
 		this.nomeDiretor = dados.nomeDiretor();
-	}
-
-	public Filme( ) {
-		
-	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public String getTitulo() {
-		return titulo;
-	}
-	public void setTitulo(String nome) {
-		this.titulo = nome;
-	}
-	public String getNomeDiretor() {
-		return nomeDiretor;
-	}
-	public void setNomeDiretor(String nomeDiretor) {
-		this.nomeDiretor = nomeDiretor;
 	}
 
 	public void atualizarInformacoes(DadosAtualizacaoFilme dados) {
