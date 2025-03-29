@@ -1,62 +1,69 @@
 package br.com.locadora.filme;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/filme")
 public class FilmeController {
-	
-	@Autowired
-	private FilmeRepository repository;
+
+	private final FilmeService service;
+	private final FilmeMapper mapper;
 	
 	@GetMapping ("/formulario")                  
 	public String carregaPaginaFormulario (UUID id, Model model){
 		System.out.println("Id" + id);
 		if(id != null) {
-	        var filme = repository.getReferenceById(id);
+	        var filme = service.getReferenceById(id);
 	        model.addAttribute("filme", filme);
 	    }
 	    return "filme/formulario";              
 	}     
 	@GetMapping                                           
 	public String carregaPaginaListagem (Model model){    
-	    model.addAttribute("lista", repository.findAll(Sort.by("titulo").ascending()));
+	    model.addAttribute("lista", service.findAll());
 	    return "filme/listagem";                         
 	} 
 
-	@PostMapping
-	@Transactional
-	public String cadastrar ( @Valid DadosCadastroFilme dados) {
-		repository.save(new Filme(dados));
-		return   "redirect:filme";      
+	@PostMapping("{id}")
+	public String salvar(@RequestBody @Valid DadosCadastroFilme dados) {
+		Filme filme = mapper.toEntity(dados);
+		service.salvar(filme);
+		return  "redirect:filme";
 	}
 	
-	@PutMapping
-	@Transactional
-	public String atualizar (DadosAtualizacaoFilme dados) {
-		var filme = repository.getReferenceById(dados.id());
-		filme.atualizarInformacoes(dados);
-		return "redirect:filme";  
+	@PutMapping("{id}")
+	public String atualizar (
+			@PathVariable("id") String id,
+			@RequestBody @Valid DadosCadastroFilme dados) {
+
+		service.obterPorId(UUID.fromString(id))
+				.map(filme -> {
+					Filme entidadeAux = mapper.toEntity(dados);
+					filme.setTitulo(entidadeAux.getTitulo());
+					filme.setNomeDiretor(entidadeAux.getNomeDiretor());
+
+					service.atualizar(filme);
+
+					return "redirect:filme";
+				});
+
+		return "redirect:filme";
 	}
 	
 	@DeleteMapping
-	@Transactional
-	public String removeFilme (UUID id) {
-		repository.deleteById (id);
+	public String removeFilme (@PathVariable("id") String id) {
+		service.obterPorId(UUID.fromString(id))
+				.map(filme -> {
+					service.excluir(filme);
+					return "redirect:filme";
+				});
 		return "redirect:filme";  
 	}
 	

@@ -1,10 +1,11 @@
 package br.com.locadora.filme;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 import java.util.UUID;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +31,13 @@ public class FilmeService {
 		}
 
 		repository.save(filme);
+	}
+
+	public Object findAll() {
+		return repository.findAll((Sort.by("titulo").ascending()));
+	}
+
+	public Filme getReferenceById(UUID id) {
+		return repository.getReferenceById(id);
 	}
 }
