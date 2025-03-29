@@ -1,0 +1,11 @@
+CREATE TABLE ator(
+    id UUID NOT NULL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    nacionalidade VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE filme(
+    id UUID NOT NULL PRIMARY KEY,
+    titulo VARCHAR(100) NOT NULL,
+    nome_diretor VARCHAR(100) NOT NULL
+);

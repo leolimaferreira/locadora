@@ -1,0 +1,30 @@
+spring:
+ application:
+  name: locadora
+
+ datasource:
+  driver-class-name: org.postgresql.Driver
+  url: jdbc:postgresql://localhost:5432/locadora
+  username: postgres
+  password: postgres
+ jpa:
+  properties:
+   hibernate:
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+  show-sql: true
+  hibernate:
+   ddl-auto: update
+ mvc:
+  hiddenmethod:
+   filter:
+    enabled: true
+
+ thymeleaf:
+  cache: false
+
+ web:
+  resources:
+   static-locations: classpath:/static/
+
+server:
+ port: 8080

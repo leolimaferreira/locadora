@@ -1,29 +1,29 @@
 package br.com.locadora.filme;
 
-import java.io.Serializable;
-import java.util.List;
-
 import br.com.locadora.ator.Ator;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @Entity
 @Data
 @RequiredArgsConstructor
-public class Filme implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public class Filme{
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;
-	
+	@GeneratedValue(strategy=GenerationType.UUID)
+	private UUID id;
+
+	@Column(name = "titulo", length = 100, nullable = false)
 	private String titulo;
-	
+
+	@Column(name = "nome_diretor", length = 100, nullable = false)
 	private String nomeDiretor;
 
-	@ManyToMany(mappedBy = "ator")
+	@ManyToMany(mappedBy = "filmes")
 	private List<Ator> atores;
 
 	public Filme(DadosCadastroFilme dados) {

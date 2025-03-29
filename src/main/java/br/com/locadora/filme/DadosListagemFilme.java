@@ -1,7 +1,9 @@
 package br.com.locadora.filme;
 
+import java.util.UUID;
+
 public record DadosListagemFilme(
-	Long id,
+	UUID id,
 	String titulo,
 	String nomeDiretor) {
 	public DadosListagemFilme (Filme filme) {

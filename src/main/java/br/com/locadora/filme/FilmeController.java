@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
+import java.util.UUID;
+
 
 @Controller
 @RequestMapping("/filme")
@@ -22,7 +24,7 @@ public class FilmeController {
 	private FilmeRepository repository;
 	
 	@GetMapping ("/formulario")                  
-	public String carregaPaginaFormulario (Long id, Model model){ 
+	public String carregaPaginaFormulario (UUID id, Model model){
 		System.out.println("Id" + id);
 		if(id != null) {
 	        var filme = repository.getReferenceById(id);
@@ -53,7 +55,7 @@ public class FilmeController {
 	
 	@DeleteMapping
 	@Transactional
-	public String removeFilme (Long id) {
+	public String removeFilme (UUID id) {
 		repository.deleteById (id);
 		return "redirect:filme";  
 	}
