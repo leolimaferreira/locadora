@@ -23,7 +23,12 @@ public class Filme{
 	@Column(name = "nome_diretor", length = 100, nullable = false)
 	private String nomeDiretor;
 
-	@ManyToMany(mappedBy = "filmes")
+	@ManyToMany
+	@JoinTable(
+			name = "filme_ator",
+			joinColumns = @JoinColumn(name = "filme_id"),
+			inverseJoinColumns = @JoinColumn(name = "ator_id")
+	)
 	private List<Ator> atores;
 
 	public Filme(DadosCadastroFilme dados) {
